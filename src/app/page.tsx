@@ -1,86 +1,265 @@
-import {
-  ArrowRightIcon,
-  BookOpenIcon,
-  Code2Icon,
-  GitBranchIcon,
-  TerminalIcon,
-} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
-import { createMetadata } from "@/config/metadata";
-import { siteConfig } from "@/config/site";
+const MEMORY_PHOTOS = [
+  "/image/paska-n-friend-1.jpg",
+  "/image/paska-n-friend-2.jpg",
+  "/image/paska-n-friend-3.JPEG",
+  "/image/paska-n-friend-4.JPEG",
+  "/image/paska-n-friend-5.JPEG",
+  "/image/paska-n-friend-6.JPEG",
+  "/image/paska-n-friend-8.JPEG",
+  "/image/paska-n-friend-10.jpeg",
+  "/image/paska-n-friend-11.jpeg",
+  "/image/paska-n-friend-12.jpeg",
+  "/image/paska-n-friend-13.jpeg",
+  "/image/paska-n-friend-14.jpeg",
+];
 
-export const metadata = createMetadata("/");
+import { getMessageCount } from "@/lib/api";
 
-const installCommand =
-  "git clone https://github.com/devinaacs/next-starter-kit.git my-app && cd my-app && cp .env.example .env.local && npm install";
+function getDaysLeft() {
+  const departure = new Date("2026-07-17T00:00:00");
+  return Math.ceil((departure.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+}
 
-export default function Home() {
+export default async function HomePage() {
+  let count = 0;
+  try {
+    count = await getMessageCount();
+  } catch {
+    // show 0 if API unavailable
+  }
+
+  const daysLeft = getDaysLeft();
+
   return (
-    <main className="grow overflow-hidden bg-brand-bg px-5 py-8 text-brand-fg sm:px-8 lg:px-12">
-      <section className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-7xl items-center justify-center">
-        <div className="hero-frame relative w-full overflow-hidden border border-brand-accent/70 bg-brand-surface shadow-2xl shadow-black">
-          <div className="hero-grid absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.055)_1px,transparent_1px)] bg-[size:44px_44px]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.35),rgba(5,5,5,0.78))]" />
+    <div
+      className="relative min-h-screen overflow-hidden"
+      style={{ background: "#f9f9f9" }}
+    >
+      {/* Background gradient mesh (subtle, fixed) */}
+      <div
+        className="fixed inset-0 gradient-mesh opacity-20 pointer-events-none"
+        style={{ zIndex: 0 }}
+      />
+      {/* Glowing blobs */}
+      <div
+        className="fixed w-64 h-64 rounded-full pointer-events-none"
+        style={{
+          top: "25%",
+          right: "-5rem",
+          background: "#ff1cf7",
+          filter: "blur(100px)",
+          opacity: 0.25,
+          zIndex: 0,
+        }}
+      />
+      <div
+        className="fixed w-64 h-64 rounded-full pointer-events-none"
+        style={{
+          bottom: "25%",
+          left: "-5rem",
+          background: "#ff8a00",
+          filter: "blur(100px)",
+          opacity: 0.25,
+          zIndex: 0,
+        }}
+      />
 
-          <span className="hero-corner absolute top-0 left-0 h-16 w-16 border-t-2 border-l-2 border-brand-accent" />
-          <span className="hero-corner absolute top-0 right-0 h-16 w-16 border-t-2 border-r-2 border-brand-accent" />
-          <span className="hero-corner absolute bottom-0 left-0 h-16 w-16 border-b-2 border-l-2 border-brand-accent" />
-          <span className="hero-corner absolute right-0 bottom-0 h-16 w-16 border-r-2 border-b-2 border-brand-accent" />
-
-          <div className="relative mx-auto flex min-h-[560px] max-w-5xl flex-col items-center justify-center px-6 py-16 text-center sm:px-10 lg:px-16">
-            <div className="hero-fade-up mb-8 inline-flex items-center gap-2 border border-brand-accent/30 bg-black/35 px-5 py-3 text-xs font-bold tracking-[0.28em] text-brand-accent uppercase">
-              <Code2Icon className="size-4" />
-              Open source
+      {/* Content */}
+      <div
+        className="relative mx-auto flex max-w-[480px] flex-col items-center px-5 text-center"
+        style={{ zIndex: 1 }}
+      >
+        {/* Hero section */}
+        <section className="flex w-full flex-col items-center gap-8 pt-8">
+          {/* Polaroid */}
+          <div className="relative mb-4 h-48 w-48">
+            {/* Outer white rotated backing */}
+            <div
+              className="absolute inset-0 rounded-xl bg-white shadow-xl"
+              style={{ transform: "rotate(3deg)" }}
+            />
+            {/* Image layer */}
+            <div
+              className="absolute inset-0 overflow-hidden rounded-xl border-4 border-white shadow-lg"
+              style={{ background: "#e8e8e8", transform: "rotate(-3deg)" }}
+            >
+              <Image
+                src="/image/paska.jpeg"
+                alt="Paska"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
-
-            <div className="hero-fade-up hero-delay-100 space-y-5">
-              <p className="text-xs font-semibold tracking-[0.24em] text-brand-accent/80 uppercase sm:text-sm">
-                {siteConfig.name}
-              </p>
-              <h1 className="mx-auto max-w-6xl font-serif text-[3.5rem] leading-[0.94] font-black tracking-normal text-balance sm:text-[4.75rem] lg:text-[5.25rem] xl:text-[5.625rem]">
-                Start building today
-              </h1>
-              <p className="mx-auto max-w-3xl text-base leading-7 text-brand-muted sm:text-lg sm:leading-8">
-                Clone the repository, install dependencies, and start shipping.
-                It&apos;s that simple. No configuration, no hassle.
-              </p>
-            </div>
-
-            <div className="hero-fade-up hero-delay-200 mt-8 flex w-full max-w-xl flex-col justify-center gap-4 sm:flex-row">
-              <Button
-                asChild
-                className="h-14 rounded-none bg-brand-accent px-8 text-base font-bold text-black transition-transform hover:-translate-y-0.5 hover:bg-brand-accent-hover"
-              >
-                <a href={siteConfig.links.github}>
-                  <GitBranchIcon className="size-5" />
-                  View on GitHub
-                </a>
-              </Button>
-              <Button
-                asChild
-                className="h-14 rounded-none border-brand-fg/25 bg-black/20 px-8 text-base font-bold text-brand-fg transition-transform hover:-translate-y-0.5 hover:bg-brand-fg/10 hover:text-brand-fg"
-                variant="outline"
-              >
-                <a href={siteConfig.links.docs}>
-                  <BookOpenIcon className="size-5" />
-                  Documentation
-                  <ArrowRightIcon className="size-5" />
-                </a>
-              </Button>
-            </div>
-
-            <div className="hero-fade-up hero-delay-300 mt-12 h-px w-full max-w-4xl bg-brand-fg/15" />
-
-            <div className="hero-fade-up hero-delay-400 mt-8 flex w-full max-w-4xl items-start gap-4 border border-brand-accent/25 bg-black/45 px-4 py-4 text-left shadow-xl shadow-black/40 sm:px-5">
-              <TerminalIcon className="mt-0.5 size-5 shrink-0 text-brand-accent" />
-              <code className="min-w-0 font-mono text-xs leading-6 [overflow-wrap:anywhere] whitespace-normal text-brand-accent select-text sm:text-sm lg:text-base">
-                {installCommand}
-              </code>
+            {/* CMK FAM badge */}
+            <div
+              className="absolute -bottom-4 -right-4 rounded-full px-3 py-1 text-[12px] font-bold uppercase tracking-wider text-white shadow-md"
+              style={{
+                background: "#aa00a5",
+                transform: "rotate(12deg)",
+                fontFamily: "var(--font-body)",
+              }}
+            >
+              cmk fam
             </div>
           </div>
-        </div>
-      </section>
-    </main>
+
+          {/* Headlines */}
+          <div className="flex flex-col gap-3">
+            <h2
+              className="font-extrabold lowercase leading-none tracking-tighter text-[#1b1b1b]"
+              style={{
+                fontFamily: "var(--font-headline)",
+                fontSize: "36px",
+                lineHeight: "36px",
+                letterSpacing: "-0.04em",
+              }}
+            >
+              say bye to{" "}
+              <span style={{ color: "#aa00a5" }}>paska</span> 👋
+            </h2>
+            <p
+              className="mx-auto max-w-[320px] lowercase text-[18px]"
+              style={{ color: "#564051", fontFamily: "var(--font-body)", fontWeight: 500 }}
+            >
+              paska is leaving cmk for a new adventure on july 17.
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="w-full pt-2">
+            <Link
+              href="/write"
+              className="bouncy-tap flex w-full items-center justify-center gap-3 rounded-full py-5 px-8 text-white shadow-2xl transition-transform hover:scale-[1.02]"
+              style={{
+                background: "#1b1b1b",
+                fontFamily: "var(--font-body)",
+                fontWeight: 700,
+                fontSize: "16px",
+              }}
+            >
+              <span className="lowercase">leave a message</span>
+              <span>✏️</span>
+            </Link>
+          </div>
+        </section>
+
+        {/* Feature grid */}
+        <section className="mt-8 grid w-full grid-cols-2 gap-4">
+          {/* Card 1: notes sent */}
+          <div
+            className="floating-card speech-bubble-tail flex flex-col gap-2 rounded-2xl bg-white p-6"
+            style={{ transform: "rotate(1deg)" }}
+          >
+            <span className="text-2xl" style={{ color: "#914c00" }}>❤️</span>
+            <p
+              className="lowercase"
+              style={{
+                fontFamily: "var(--font-body)",
+                fontWeight: 700,
+                fontSize: "14px",
+                letterSpacing: "0.02em",
+                color: "#1b1b1b",
+              }}
+            >
+              {count} notes sent
+            </p>
+          </div>
+          {/* Card 2: next stop */}
+          <div
+            className="floating-card flex flex-col gap-2 rounded-2xl bg-white p-6"
+            style={{ transform: "rotate(-2deg)" }}
+          >
+            <span className="text-2xl" style={{ color: "#aa00a5" }}>✈️</span>
+            <p
+              className="lowercase"
+              style={{
+                fontFamily: "var(--font-body)",
+                fontWeight: 700,
+                fontSize: "14px",
+                letterSpacing: "0.02em",
+                color: "#1b1b1b",
+              }}
+            >
+              next stop: tripatra
+            </p>
+          </div>
+          {/* Card 3: countdown (full width) */}
+          <div className="floating-card col-span-2 flex items-center gap-4 rounded-2xl bg-white p-6">
+            <div
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl"
+              style={{ background: "#c9a900", color: "#4c3e00" }}
+            >
+              ⏰
+            </div>
+            <div className="flex flex-col">
+              <p
+                className="lowercase"
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontWeight: 700,
+                  fontSize: "14px",
+                  letterSpacing: "0.02em",
+                  color: "#564051",
+                }}
+              >
+                countdown
+              </p>
+              <p
+                className="lowercase"
+                style={{
+                  fontFamily: "var(--font-headline)",
+                  fontWeight: 800,
+                  fontSize: "24px",
+                  lineHeight: "28px",
+                  letterSpacing: "-0.02em",
+                  color: "#aa00a5",
+                }}
+              >
+                {daysLeft > 0 ? `${daysLeft} days left` : "the day is here! 🎉"}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Mini gallery */}
+        <section className="mt-8 w-full">
+          <h3
+            className="mb-4 ml-2 lowercase text-[#564051]"
+            style={{
+              fontFamily: "var(--font-body)",
+              fontWeight: 700,
+              fontSize: "14px",
+              letterSpacing: "0.02em",
+            }}
+          >
+            recent memories
+          </h3>
+          <div className="no-scrollbar flex gap-4 overflow-x-auto pb-4">
+            {MEMORY_PHOTOS.map((src, i) => {
+              const rotations = ["0deg", "3deg", "-2deg", "1.5deg", "-1deg", "2deg", "-2.5deg", "1deg", "-1.5deg", "2.5deg", "-1deg", "1.5deg", "-2deg", "1deg"];
+              return (
+                <div
+                  key={i}
+                  className="relative shrink-0 w-32 h-40 overflow-hidden rounded-2xl shadow-sm transition-transform hover:scale-105"
+                  style={{ transform: `rotate(${rotations[i % rotations.length]})` }}
+                >
+                  <Image
+                    src={src}
+                    alt={`memory ${i + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="128px"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }

@@ -1,31 +1,47 @@
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Be_Vietnam_Pro, Plus_Jakarta_Sans } from "next/font/google";
 
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { AppHeader } from "@/components/layout/app-header";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { AppProviders } from "@/components/shared/app-providers";
-import { metadata } from "@/config/metadata";
 
 import "./globals.css";
 
-export { metadata };
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-headline",
+  weight: ["400", "500", "700", "800"],
+  display: "swap",
+});
+
+const beVietnam = Be_Vietnam_Pro({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+export const metadata = {
+  title: "Farewell, Paska!",
+  description: "Say goodbye to Paska and leave a note on the farewell wall!",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
+      className={`${plusJakarta.variable} ${beVietnam.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="overflow-x-hidden bg-[#f9f9f9] text-[#1b1b1b]">
         <AppProviders>
-          <SiteHeader />
-          {children}
-          <SiteFooter />
+          <AppHeader />
+          {/* pt-[108px] accounts for fixed ticker (~36px) + pill header (~56px) + gap */}
+          <main className="relative min-h-screen pt-[108px] pb-28">
+            {children}
+          </main>
+          <BottomNav />
         </AppProviders>
       </body>
     </html>
