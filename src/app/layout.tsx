@@ -21,8 +21,19 @@ const beVietnam = Be_Vietnam_Pro({
 });
 
 export const metadata = {
-  title: "Farewell, Paska!",
-  description: "Say goodbye to Paska and leave a note on the farewell wall!",
+  title: "Farewell, Paska! 👋",
+  description: "Paska is leaving CMK for Tripatra on July 17. Leave a note on his farewell wall!",
+  openGraph: {
+    title: "Farewell, Paska! 👋",
+    description: "Paska is leaving CMK for Tripatra on July 17. Leave a note on his farewell wall!",
+    images: [{ url: "/og", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Farewell, Paska! 👋",
+    description: "Paska is leaving CMK for Tripatra on July 17. Leave a note on his farewell wall!",
+    images: ["/og"],
+  },
 };
 
 export default function RootLayout({

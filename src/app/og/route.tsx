@@ -1,142 +1,208 @@
 import { ImageResponse } from "next/og";
 
-import { siteConfig } from "@/config/site";
-
 export const runtime = "edge";
 
-const size = {
-  width: 1200,
-  height: 630,
-};
+const size = { width: 1200, height: 630 };
 
 export function GET() {
   return new ImageResponse(
     <div
       style={{
-        alignItems: "center",
-        background: "#050505",
-        color: "#f5f0e8",
-        display: "flex",
-        fontFamily: "serif",
-        height: "100%",
-        justifyContent: "center",
-        padding: 56,
         width: "100%",
+        height: "100%",
+        display: "flex",
+        background: "#f9f9f9",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Gradient mesh blobs */}
       <div
         style={{
-          backgroundColor: "#070707",
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)",
-          backgroundSize: "38px 38px",
-          border: "2px solid rgba(216, 173, 120, 0.82)",
-          boxShadow: "0 28px 70px rgba(0,0,0,0.65)",
+          position: "absolute",
+          top: -80,
+          left: -80,
+          width: 400,
+          height: 400,
+          borderRadius: "50%",
+          background: "rgba(255, 28, 247, 0.18)",
+          filter: "blur(80px)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: -80,
+          right: -80,
+          width: 400,
+          height: 400,
+          borderRadius: "50%",
+          background: "rgba(255, 138, 0, 0.18)",
+          filter: "blur(80px)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: 200,
+          right: 200,
+          width: 300,
+          height: 300,
+          borderRadius: "50%",
+          background: "rgba(170, 0, 165, 0.10)",
+          filter: "blur(80px)",
+        }}
+      />
+
+      {/* Decorative post-it cards (background) */}
+      <div
+        style={{
+          position: "absolute",
+          top: 60,
+          right: 80,
+          width: 180,
+          height: 180,
+          background: "#EF9480",
+          borderRadius: 16,
+          transform: "rotate(8deg)",
+          boxShadow: "0 12px 30px rgba(0,0,0,0.15)",
           display: "flex",
           flexDirection: "column",
-          height: "100%",
-          justifyContent: "center",
-          overflow: "hidden",
-          padding: "64px 72px",
-          position: "relative",
-          width: "100%",
+          padding: 20,
+          gap: 12,
         }}
       >
-        <div
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(5,5,5,0.18), rgba(5,5,5,0.82))",
-            height: "100%",
-            left: 0,
-            position: "absolute",
-            top: 0,
-            width: "100%",
-          }}
-        />
+        <span style={{ fontSize: 36 }}>🚀</span>
+        <span style={{ color: "white", fontSize: 18, fontWeight: 700, fontFamily: "sans-serif" }}>good luck!</span>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 260,
+          right: 50,
+          width: 160,
+          height: 160,
+          background: "#6667AB",
+          borderRadius: 16,
+          transform: "rotate(-6deg)",
+          boxShadow: "0 12px 30px rgba(0,0,0,0.15)",
+          display: "flex",
+          flexDirection: "column",
+          padding: 20,
+          gap: 12,
+        }}
+      >
+        <span style={{ fontSize: 32 }}>❤️</span>
+        <span style={{ color: "white", fontSize: 16, fontWeight: 700, fontFamily: "sans-serif" }}>we'll miss you</span>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 420,
+          right: 180,
+          width: 150,
+          height: 150,
+          background: "#95B4AA",
+          borderRadius: 16,
+          transform: "rotate(5deg)",
+          boxShadow: "0 12px 30px rgba(0,0,0,0.15)",
+          display: "flex",
+          flexDirection: "column",
+          padding: 20,
+          gap: 10,
+        }}
+      >
+        <span style={{ fontSize: 28 }}>✨</span>
+        <span style={{ color: "white", fontSize: 14, fontWeight: 700, fontFamily: "sans-serif" }}>congrats!</span>
+      </div>
 
+      {/* Main content */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "64px 80px",
+          gap: 24,
+          maxWidth: 780,
+        }}
+      >
+        {/* Eyebrow chip */}
         <div
           style={{
-            border: "1px solid rgba(216, 173, 120, 0.35)",
-            color: "#d8ad78",
             display: "flex",
-            fontFamily: "sans-serif",
-            fontSize: 18,
-            fontWeight: 800,
-            letterSpacing: "0.24em",
-            padding: "16px 24px",
-            position: "relative",
-            textTransform: "uppercase",
-            width: "max-content",
-          }}
-        >
-          Open source
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 24,
-            marginTop: 46,
-            position: "relative",
-          }}
-        >
-          <p
-            style={{
-              color: "rgba(216, 173, 120, 0.82)",
-              fontFamily: "sans-serif",
-              fontSize: 22,
-              fontWeight: 800,
-              letterSpacing: "0.18em",
-              margin: 0,
-              textTransform: "uppercase",
-            }}
-          >
-            {siteConfig.name}
-          </p>
-          <h1
-            style={{
-              color: "#f5f0e8",
-              fontSize: 92,
-              fontWeight: 900,
-              letterSpacing: "-0.03em",
-              lineHeight: 0.92,
-              margin: 0,
-              maxWidth: 880,
-            }}
-          >
-            Start building today
-          </h1>
-          <p
-            style={{
-              color: "#aaa39b",
-              fontFamily: "sans-serif",
-              fontSize: 31,
-              lineHeight: 1.42,
-              margin: 0,
-              maxWidth: 910,
-            }}
-          >
-            Clone the repository, install dependencies, and start shipping. No
-            configuration, no hassle.
-          </p>
-        </div>
-
-        <div
-          style={{
             alignItems: "center",
-            border: "1px solid rgba(216, 173, 120, 0.3)",
-            bottom: 52,
-            color: "#d8ad78",
-            display: "flex",
-            fontFamily: "monospace",
-            fontSize: 24,
-            left: 72,
-            padding: "18px 24px",
-            position: "absolute",
+            gap: 10,
+            background: "#aa00a5",
+            color: "white",
+            borderRadius: 999,
+            padding: "10px 24px",
+            width: "max-content",
+            fontFamily: "sans-serif",
+            fontSize: 20,
+            fontWeight: 700,
+            letterSpacing: "0.02em",
           }}
         >
-          npm install && npm run dev
+          🎉 paska post-it wall
+        </div>
+
+        {/* Headline */}
+        <h1
+          style={{
+            margin: 0,
+            fontFamily: "sans-serif",
+            fontWeight: 900,
+            fontSize: 100,
+            lineHeight: 0.9,
+            letterSpacing: "-0.04em",
+            color: "#1b1b1b",
+          }}
+        >
+          farewell,{"\n"}paska! 👋
+        </h1>
+
+        {/* Subtitle */}
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "sans-serif",
+            fontSize: 28,
+            color: "#564051",
+            fontWeight: 500,
+            lineHeight: 1.4,
+          }}
+        >
+          leave a note on the wall before
+          <br />
+          he heads to tripatra ✈️
+        </p>
+
+        {/* Footer tag */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            marginTop: 8,
+          }}
+        >
+          <div
+            style={{
+              background: "#ff8a00",
+              color: "white",
+              borderRadius: 999,
+              padding: "8px 20px",
+              fontFamily: "sans-serif",
+              fontSize: 18,
+              fontWeight: 700,
+            }}
+          >
+            cmk → tripatra
+          </div>
+          <span style={{ color: "#564051", fontFamily: "sans-serif", fontSize: 18 }}>
+            · july 17, 2026
+          </span>
         </div>
       </div>
     </div>,
