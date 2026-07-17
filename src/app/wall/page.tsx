@@ -7,10 +7,36 @@ import { useEffect, useState } from "react";
 import { type Message, getMessages } from "@/lib/api";
 
 const CARD_COLORS = ["#EF9480", "#87A2AB", "#95B4AA", "#6667AB", "#E88796", "#AC8AAD", "#FDB813"];
-const CARD_ROTATIONS = ["-6deg", "5deg", "-3.5deg", "7deg", "-5deg", "4deg", "-7deg", "3deg", "6deg"];
-const CARD_OFFSETS = ["0px", "12px", "-8px", "20px", "-16px", "8px", "-12px", "16px", "-4px"];
 const ICON_EMOJIS = ["🎉", "🚀", "❤️", "✨", "👏", "🌟"];
 
+
+function estimateCardHeight(msg: Message) {
+  const CHARS_PER_LINE = 13;
+  const LINE_HEIGHT = 26;
+  const BASE_HEIGHT = 144; // icon row + author row + card padding/gaps
+  const lines = Math.max(1, Math.ceil(msg.message.length / CHARS_PER_LINE));
+  return BASE_HEIGHT + lines * LINE_HEIGHT;
+}
+
+function splitIntoBalancedColumns(messages: Message[]) {
+  const left: { msg: Message; index: number }[] = [];
+  const right: { msg: Message; index: number }[] = [];
+  let leftHeight = 0;
+  let rightHeight = 0;
+
+  messages.forEach((msg, index) => {
+    const height = estimateCardHeight(msg);
+    if (leftHeight <= rightHeight) {
+      left.push({ msg, index });
+      leftHeight += height;
+    } else {
+      right.push({ msg, index });
+      rightHeight += height;
+    }
+  });
+
+  return { left, right };
+}
 
 function initials(name: string) {
   return name.trim().split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 1);
@@ -18,8 +44,6 @@ function initials(name: string) {
 
 function PostItCard({ msg, index }: { msg: Message; index: number }) {
   const bg = CARD_COLORS[index % CARD_COLORS.length];
-  const rotate = CARD_ROTATIONS[index % CARD_ROTATIONS.length];
-  const offset = CARD_OFFSETS[index % CARD_OFFSETS.length];
   const icon = msg.sticker || ICON_EMOJIS[index % ICON_EMOJIS.length];
 
   return (
@@ -32,11 +56,11 @@ function PostItCard({ msg, index }: { msg: Message; index: number }) {
       style={{
         background: bg,
         boxShadow: "0 10px 25px rgba(0,0,0,0.18)",
-        transform: `rotate(${rotate}) translateX(${offset})`,
+        transform: "scale(1)",
         transition: "transform 0.2s ease",
       }}
-      onMouseEnter={e => (e.currentTarget.style.transform = "rotate(0deg) translateX(0px) scale(1.04)")}
-      onMouseLeave={e => (e.currentTarget.style.transform = `rotate(${rotate}) translateX(${offset})`)}
+      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.04)")}
+      onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
     >
       {/* Icon / sticker */}
       <span className="text-2xl drop-shadow">{icon}</span>
@@ -78,9 +102,8 @@ export default function WallPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Split into two columns for staggered masonry layout
-  const leftCol = messages.filter((_, i) => i % 2 === 0);
-  const rightCol = messages.filter((_, i) => i % 2 === 1);
+  // Split into two columns, balancing estimated card height across both
+  const { left: leftCol, right: rightCol } = splitIntoBalancedColumns(messages);
 
   return (
     <div className="bg-gradient-mesh min-h-screen">
@@ -115,7 +138,7 @@ export default function WallPage() {
               letterSpacing: "-0.04em",
             }}
           >
-            we&apos;ll miss you, legend!
+            we&apos;ll miss you, buddy!
           </h2>
           <p
             className="opacity-80 lowercase"
@@ -165,14 +188,14 @@ export default function WallPage() {
           <div className="grid grid-cols-2 gap-4 pb-12 items-start">
             {/* Left column */}
             <div className="flex flex-col gap-4">
-              {leftCol.map((msg, i) => (
-                <PostItCard key={msg.id} msg={msg} index={i * 2} />
+              {leftCol.map(({ msg, index }) => (
+                <PostItCard key={msg.id} msg={msg} index={index} />
               ))}
             </div>
-            {/* Right column — offset by mt-8 for staggered masonry feel */}
-            <div className="flex flex-col gap-4 mt-8">
-              {rightCol.map((msg, i) => (
-                <PostItCard key={msg.id} msg={msg} index={i * 2 + 1} />
+            {/* Right column */}
+            <div className="flex flex-col gap-4">
+              {rightCol.map(({ msg, index }) => (
+                <PostItCard key={msg.id} msg={msg} index={index} />
               ))}
             </div>
           </div>
